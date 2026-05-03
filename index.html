@@ -345,7 +345,7 @@
 </div>
 
 <audio id="bg-music" loop>
-  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" type="audio/mpeg">
+  <source src="daydream.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -353,7 +353,7 @@
 `Yesss 😍 Mission completed ✅
 
 Məryəm, sən mənim üçün hər şeydən önəmlisən.
-Həyatın mənə verdiyi ən dəyərli hədiyyəsən, mənim hər şeyimsən.
+H�yatın mənə verdiyi ən dəyərli hədiyyəsən, mənim hər şeyimsən.
 
 Səni incitmək və ya kefini qaçırmaq heç vaxt istəmərəm.
 Belə qalmağına da icazə verə bilmərəm.
@@ -440,9 +440,7 @@ Belə qalmağına da icazə verə bilmərəm.
     document.getElementById('yes-message').textContent = MESSAGE;
     document.getElementById('yes-page').classList.add('show');
     spawnHearts();
-    audio.volume = 0.35;
-    audio.play().catch(() => {});
-    musicOn = true;
+    fadeInMusic();
   }
 
   /* ── Hearts ── */
@@ -462,9 +460,32 @@ Belə qalmağına da icazə verə bilmərəm.
   }
 
   /* ── Music toggle ── */
+  function fadeInMusic() {
+    if (musicOn) return;
+    audio.volume = 0;
+    audio.play().then(() => {
+      musicOn = true;
+      const target = 0.3;
+      const interval = setInterval(() => {
+        if (audio.volume + 0.02 >= target) {
+          audio.volume = target;
+          clearInterval(interval);
+        } else {
+          audio.volume = parseFloat((audio.volume + 0.02).toFixed(3));
+        }
+      }, 80);
+    }).catch(() => {});
+  }
+
+  /* music toggle */
   function toggleMusic() {
-    if (musicOn) { audio.pause(); musicOn = false; }
-    else { audio.volume = 0.35; audio.play().catch(() => {}); musicOn = true; }
+    if (musicOn) {
+      audio.pause();
+      musicOn = false;
+    } else {
+      audio.volume = 0.3;
+      audio.play().then(() => { musicOn = true; }).catch(() => {});
+    }
   }
 </script>
 </body>
